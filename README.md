@@ -34,10 +34,10 @@
 │    │        │   __init__.py
 │    │        │   Ejecutable.py  # Representa un programa cargado o en ejecución
 │    │        │   Ensamblador.py # Responsable de parsear el código .asm
-│    │        └───instructions # Implementación concreta de cada instrucción ASM
-│    │           │   __init__.py
-│    │           │   catalog.py     # Gestiona/registra las instrucciones disponibles
-│    │           │   Mov.py         # Implementación específica de la instrucción MOV
+│    │        └─── 📂instructions # Implementación concreta de cada instrucción ASM
+│    │             │   __init__.py
+│    │             │   catalog.py     # Gestiona/registra las instrucciones disponibles
+│    │             │   Mov.py         # Implementación específica de la instrucción MOV
 │    │
 │    ├─── 📂interfaces    # Define interfaces o clases base abstractas
 │    │    │   __init__.py
