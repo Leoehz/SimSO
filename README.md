@@ -36,7 +36,6 @@
 │    │        │   Ensamblador.py # Responsable de parsear el código .asm
 │    │        └─── 📂instructions # Implementación concreta de cada instrucción ASM
 │    │             │   __init__.py
-│    │             │   catalog.py     # Gestiona/registra las instrucciones disponibles
 │    │             │   Mov.py         # Implementación específica de la instrucción MOV
 │    │
 │    ├─── 📂interfaces    # Define interfaces o clases base abstractas
