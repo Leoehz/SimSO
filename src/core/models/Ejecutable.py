@@ -1,4 +1,4 @@
-from Ensamblador import *
+from Ensamblador import Ensamblador
 
 class Ejecutable:
     def __init__(self, path):
@@ -7,9 +7,9 @@ class Ejecutable:
     def crearEjecutable(self):
         self.instrucciones, self.error = self.ensamblador.parsear()
         if self.error[0]:
-            print(error[1])
+            print(self.error[1])
             raise Exception
 
     def ejecutar(self):
-        for instruccion in instrucciones:
+        for instruccion in self.instrucciones:
             instruccion.ejecutar()
