@@ -1,4 +1,4 @@
-from utils.validators import valid_line, validate_instruct, validate_params
+from utils.validators import valid_line, validate_instruct, validate_params, TypeLine, ENTRYPOINT_LABEL
 
 class Ensamblador:
 
@@ -8,6 +8,8 @@ class Ensamblador:
 	def parsear(self):
 		instrucciones = []
 		codigo_fuente = []
+		lookup_table = {}
+		entry_point = -1
 		error_flag = False
 		errores = []
 
@@ -18,9 +20,9 @@ class Ensamblador:
 				if line == '' or line[0] == '#':
 					continue
 
-				match = valid_line(line)
+				match, type_line = valid_line(line)
 				try:
-					if match:
+					if type_line == TypeLine.inst:
 						inst = str(match.group(1))
 						inst = validate_instruct(inst=inst) # Se obtiene la clase de la instruccion
 						params = str(match.group(2))
@@ -29,14 +31,31 @@ class Ensamblador:
 						
 						instrucciones.append(inst(*params_list))
 						codigo_fuente.append(line)
+					elif type_line == TypeLine.label:
+						inst = validate_instruct(inst='noop')
+						label = str(match.group(1))
+
+						if label in lookup_table.keys():
+							raise Exception(f'La etiqueta "{label}" se encuentra repetida en el codigo.')
+
+						instrucciones.append(inst())
+						codigo_fuente.append(line)
+						label_line = len(instrucciones)-1
+						lookup_table[label] = label_line
+
+						if label == ENTRYPOINT_LABEL:
+							entry_point = label_line
 					else:
-						raise SyntaxError(f'Sintaxis no valida.')
+						raise SyntaxError('Sintaxis no valida.')
 				except Exception as e:
 					error_txt = f'Error: {e}. Linea: {len(instrucciones)-1} - "{line}". '
 					errores.append(error_txt)
 					error_flag = True
 					continue
-				
+
+		if entry_point == -1:
+			raise Exception(f'El codigo no contiene la etiqueta de inicio de codigo "{ENTRYPOINT_LABEL}"')
 
 		error = (error_flag, errores)
-		return instrucciones, error
+		# Devolver ejecutable
+		return instrucciones, lookup_table, error

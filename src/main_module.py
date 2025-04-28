@@ -1,7 +1,13 @@
-from core.models.instructions import Mov, Add
+from core.models.instructions import Mov
 from core.models.Ensamblador import Ensamblador
 
 Mov(1, 2)
 ens = Ensamblador(path=r'.\asm\mov.asm')
+instrucciones, lookup_table, error = ens.parsear()
 
-print(ens.parsear())
+for c in ens.codigo_fuente:
+    print(c)
+
+print(ens.instrucciones)
+print(lookup_table)
+print(error)

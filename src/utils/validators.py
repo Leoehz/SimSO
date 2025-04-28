@@ -1,18 +1,35 @@
 import re
+from enum import Enum
+from typing import Tuple
 from core.models.instructions import (Mov, 
                                       Add, 
                                       Inc, 
-                                      Dec)
+                                      Dec,
+                                      Noop)
 
-instrucciones_validas = [Mov, Add, Inc, Dec]
+instrucciones_validas = [Mov, Add, Inc, Dec, Noop]
 inst_factory = {inst.SYNTAX: inst for inst in instrucciones_validas}
+ENTRYPOINT_LABEL = 'main'
 
 ### Revisa las instrucciones validas seguidas de espacios y luego los parametros
-inst_pattern = f"^({'|'.join([inst.SYNTAX for inst in instrucciones_validas])})" + r'\s+([\w,\s]+)'
+inst_pattern = f"^({'|'.join([inst.SYNTAX for inst in instrucciones_validas])})" + r"\s*([\w,\s]*)"
+# Identifica una etiqueta
+label_pattern = r"(\w+):"
 
-def valid_line(line: str) -> re.Match:
+class TypeLine(Enum):
+    NULL = 0
+    inst = 1
+    label = 2
+
+def valid_line(line: str) -> Tuple[re.Match, TypeLine]:
     match = re.search(inst_pattern, line)
-    return match
+    if match:
+        return (match, TypeLine.inst)
+
+    match = re.search(label_pattern, line)
+    if match:
+        return (match, TypeLine.label)
+    return (match, TypeLine.NULL)
 
 def validate_instruct(inst: str) -> object:
     return inst_factory[inst]

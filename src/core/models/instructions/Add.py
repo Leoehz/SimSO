@@ -16,6 +16,3 @@ class Add(Instruccion):
     def ejecutar(self):
         self.param1 += self.param2
         return self.param1
-    
-    def get_params(self):
-        return self.n_params
