@@ -1,9 +1,16 @@
 from utils.validators import valid_line, validate_instruct, validate_params, TypeLine, ENTRYPOINT_LABEL
+from ..models.Ejecutable import Ejecutable
 
 class Ensamblador:
 
 	def __init__(self, path):
 		self.path = path
+		self.instrucciones = []
+		self.codigo_fuente = []
+		self.lookup_table = {}
+		self.entry_point = -1
+		self.error_flag = False
+		self.errores = []
 
 	def parsear(self):
 		instrucciones = []
@@ -59,3 +66,10 @@ class Ensamblador:
 		error = (error_flag, errores)
 		# Devolver ejecutable
 		return instrucciones, lookup_table, error
+
+	def compilar():
+		ejecutable = Ejecutable()
+		ejecutable.insertarInstrucciones(self.instrucciones, self.error)
+		ejecutable.definirEntryPoint(self.entryPoint)
+		ejecutable.crearLookupTable(self.lookUpTable)
+		return ejecutable

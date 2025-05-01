@@ -16,3 +16,13 @@ class Mov(Instruccion):
     def ejecutar(self):
         self.param1 = self.param2
         return self.param1
+
+    def ejecutar(self, registros):
+        dummy = self.param2
+        if(type(dummy)==Registro):
+            dummy = registros[self.param2]
+
+        registros[self.param1] = dummy
+        self.param1 = self.param2
+        return registros
+        #return self.param1

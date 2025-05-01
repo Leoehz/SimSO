@@ -1,13 +1,12 @@
-from core.models.instructions import Mov
+from core.models.instructions import Mov, Add
 from core.models.Ensamblador import Ensamblador
+from core.models.Ejecutable import Ejecutable
 
 Mov(1, 2)
 ens = Ensamblador(path=r'.\asm\mov.asm')
-instrucciones, lookup_table, error = ens.parsear()
 
-for c in ens.codigo_fuente:
-    print(c)
+print(ens.parsear())
 
-print(ens.instrucciones)
-print(lookup_table)
-print(error)
+ejecutable = ens.compilar()
+
+#ejecutable.ejectar()
