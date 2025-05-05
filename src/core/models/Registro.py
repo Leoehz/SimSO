@@ -5,3 +5,5 @@ class Registro(StrEnum):
     BX = 'bx'
     CX = 'cx'
     DX = 'dx'
+    IP = 'ip'
+    FLAG = 'flag'

@@ -1,2 +1,2 @@
 main:
-    add 2, 2
+    add ax, 2

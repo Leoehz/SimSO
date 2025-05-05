@@ -1,3 +1,8 @@
+noop
+noop
+noop
+
+main:
 mov ax, bx
 inc ax
 dec ax

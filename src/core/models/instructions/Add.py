@@ -1,5 +1,6 @@
 from interfaces.Instruccion import Instruccion
 from ..Registro import Registro
+from ..Procesador import Procesador
 
 class Add(Instruccion):
     N_PARAMS = 2
@@ -18,7 +19,6 @@ class Add(Instruccion):
         if(type(dummy)==Registro):
             dummy = registros[self.param2] + registros[self.param1]
         else:
-            print(f'dummy={dummy}, registros={registros}')
             dummy += registros[self.param1]
         #self.param1 += self.param2
         #procesador.setRegister(self.param1, dummy)
