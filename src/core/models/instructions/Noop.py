@@ -11,5 +11,5 @@ class Noop(Instruccion):
     def __repr__(self):
         return f'Noop()'
 
-    def ejecutar(self):
-        return
+    def ejecutar(self, registros):
+        return registros

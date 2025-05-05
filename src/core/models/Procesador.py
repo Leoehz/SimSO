@@ -1,14 +1,13 @@
 from ..models.Registro import Registro as R
 from ..models.Ejecutable import Ejecutable
 from interfaces.Instruccion import Instruccion
-from time import time
+import time
 # TODO: Terminar de implementar lo siguiente en el procesador:
 # ax, bx, cx, dx - Registros de proposito general
 # IP - Instruction Pointer
 # Flag
 
 class Procesador:
-
     def __init__(self, IP: int):
         self.IP = IP
         self.Registros = {R.AX: 0,
@@ -17,15 +16,15 @@ class Procesador:
                           R.DX: 0}
 
     # Mientras haya instrucciones segui ejecutando
-    def procesar(self, Ejecutable: ejecutable):
+    def procesar(self, ejecutable: Ejecutable):
         self.ejecutar(ejecutable)
     
-    def ejecutar(Ejecutable: ejecutable):
+    def ejecutar(self, ejecutable: Ejecutable):
         cantInstrucciones = len(ejecutable.getInstrucciones())
-        while(self.getIP < cantInstrucciones):
+        while(self.getIP() < cantInstrucciones):
             self.Registros = ejecutable.getInstruccion(self.IP).ejecutar(self.Registros)
             self.incrementarIP()
-            time.sleep(2)
+            time.sleep(1)
 
 
     def getIP(self):
@@ -34,8 +33,8 @@ class Procesador:
     def incrementarIP(self):
         self.IP += 1
 
-    def setRegister(self, Registro: registro, value):
+    def setRegister(self, registro: R, value):
         self.Registros[registro] = value
 
-    def getRegister(self, Registro: registro):
+    def getRegister(self, registro: R):
         return self.Registros[registro]

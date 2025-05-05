@@ -64,12 +64,15 @@ class Ensamblador:
 			raise Exception(f'El codigo no contiene la etiqueta de inicio de codigo "{ENTRYPOINT_LABEL}"')
 
 		error = (error_flag, errores)
+
+		self.instrucciones = instrucciones
+		self.lookup_table = lookup_table
 		# Devolver ejecutable
 		return instrucciones, lookup_table, error
 
-	def compilar():
+	def compilar(self) -> Ejecutable:
 		ejecutable = Ejecutable()
-		ejecutable.insertarInstrucciones(self.instrucciones, self.error)
-		ejecutable.definirEntryPoint(self.entryPoint)
-		ejecutable.crearLookupTable(self.lookUpTable)
+		ejecutable.insertarInstrucciones(self.instrucciones, self.errores)
+		ejecutable.definirEntryPoint(self.entry_point)
+		ejecutable.crearLookupTable(self.lookup_table)
 		return ejecutable

@@ -1,6 +1,3 @@
-from ..models.Ensamblador import Ensamblador
-from interfaces.Instruccion import Instruccion
-
 class Ejecutable:
     def __init__(self):
         self.entry_point = []
@@ -28,4 +25,4 @@ class Ejecutable:
         return self.instrucciones[IP]
 
     def ejecutar(self, IP):
-        instrucciones[IP].ejecutar()
+        self.instrucciones[IP].ejecutar()
