@@ -5,11 +5,16 @@ class Noop(Instruccion):
     SYNTAX = 'noop'
     PARAMS_TYPE = None
 
-    def __init__(self):
+    def __init__(self, label: str = None):
+        self.label = label
         pass
     
     def __repr__(self):
-        return f'Noop()'
+        if self.label is not None:
+            return f'{self.label}:'
+        else:
+            return f'Noop()'
 
-    def ejecutar(self, registros):
-        return registros
+
+    def ejecutar(self, procesador):
+        return

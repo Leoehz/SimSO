@@ -3,7 +3,7 @@ from ..Registro import Registro
 
 class Cmp(Instruccion):
     N_PARAMS = 2
-    SYNTAX = 'jmp'
+    SYNTAX = 'cmp'
     PARAMS_TYPE = [(Registro, int), (Registro, int)]
 
     def __init__(self, param1, param2):

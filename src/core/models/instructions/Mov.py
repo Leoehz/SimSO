@@ -13,16 +13,10 @@ class Mov(Instruccion):
     def __repr__(self):
         return f'Mov({self.param1}, {self.param2})'
 
-    def ejecutar(self):
-        self.param1 = self.param2
-        return self.param1
-
-    def ejecutar(self, registros):
-        dummy = self.param2
-        if(type(dummy)==Registro):
-            dummy = registros[self.param2]
-
-        registros[self.param1] = dummy
-        self.param1 = self.param2
-        return registros
-        #return self.param1
+    def ejecutar(self, procesador):
+        if(type(self.param2)==Registro):
+            value = procesador.getRegister(self.param2)
+        else:
+            value = self.param2
+        procesador.setRegister(registro=self.param1, value=value)
+        return

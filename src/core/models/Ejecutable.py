@@ -1,22 +1,16 @@
+
 class Ejecutable:
-    def __init__(self):
-        self.entry_point = []
-        self.instrucciones = []
-        self.lookup_table = []
-        self.errores = []
-
-    def insertarInstrucciones(self, instrucciones, errores):
-        self.instrucciones = instrucciones
-        self.errores = errores
-        #if self.error[0]:
-        #    print(self.error[1])
-        #    raise Exception
-
-    def definirEntryPoint(self, entry_point):
+    def __init__(self,instrucciones: list[str], codigo_fuente: list[str], lookup_table: dict[str, int], entry_point: int):
         self.entry_point = entry_point
-
-    def crearLookupTable(self, lookup_table):
+        self.instrucciones = instrucciones
+        self.codigo = codigo_fuente
         self.lookup_table = lookup_table
+
+    def getEntryPoint(self):
+        return self.entry_point
+
+    def getLookupTable(self):
+        return self.lookup_table
 
     def getInstrucciones(self):
         return self.instrucciones
