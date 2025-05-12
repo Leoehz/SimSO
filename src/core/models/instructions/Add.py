@@ -14,16 +14,18 @@ class Add(Instruccion):
     def __repr__(self):
         return f'Add({self.param1}, {self.param2})'
 
-    def ejecutar(self, registros):
+    def ejecutar(self, procesador):
         dummy = self.param2
         if(type(dummy)==Registro):
-            dummy = registros[self.param2] + registros[self.param1]
+            dummy = procesador.getRegister(self.param2) + procesador.getRegister(self.param1)
         else:
-            dummy += registros[self.param1]
+            if(type(self.param1) == Registro):
+                dummy += procesador.getRegister(self.param1)
         #self.param1 += self.param2
         #procesador.setRegister(self.param1, dummy)
-        registros[self.param1] = dummy
-        return registros
+        if(type(self.param1) == Registro):
+            procesador.setRegister(self.param1, dummy)
+        return
         #return self.param1
     
     def get_params(self):

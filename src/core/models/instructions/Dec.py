@@ -12,11 +12,11 @@ class Dec(Instruccion):
     def __repr__(self):
         return f'Dec({self.param1})'
 
-    def ejecutar(self, registros):   
+    def ejecutar(self, procesador):   
         dummy = self.param1
         if(type(dummy)==Registro):
-            dummy = registros[self.param1] - 1
-            registros[self.param1] = dummy       
+            dummy = procesador.getRegister(self.param1) - 1
+            procesador.setRegister(self.param1, dummy)       
         else:
             dummy -= 1   
-        #return self.param1
+        return

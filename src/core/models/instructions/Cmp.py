@@ -13,5 +13,15 @@ class Cmp(Instruccion):
     def __repr__(self):
         return f'Cmp({self.param1})'
 
-    def ejecutar(self):
-        pass
+    def ejecutar(self, procesador):
+        dummy = self.param2
+        flag = 0
+        if(type(dummy) == Registro):
+            flag = procesador.getRegister(dummy) == procesador.getRegister(self.param1)
+        else:
+            if(type(self.param1) == Registro):
+                flag = procesador.getRegister(self.param1) == dummy
+            else:
+                flag = self.param1 == self.param2
+        procesador.setRegister(R.FLAG, flag)
+        return
