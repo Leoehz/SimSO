@@ -23,5 +23,5 @@ class Cmp(Instruccion):
                 flag = procesador.getRegister(self.param1) == dummy
             else:
                 flag = self.param1 == self.param2
-        procesador.setRegister(R.FLAG, flag)
+        procesador.setRegister(Registro.FLAG, flag)
         return
