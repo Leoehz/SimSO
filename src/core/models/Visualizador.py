@@ -1,9 +1,11 @@
 from .Ejecutable import Ejecutable
 from .Registro import Registro as R
 from termcolor import colored
+import colorama
 
 class Visualizador:
     def __init__(self):
+        colorama.init()
         pass
 
     def mostrar(self, ejecutable: Ejecutable, registros: dict):
