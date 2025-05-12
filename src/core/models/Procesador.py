@@ -19,8 +19,8 @@ class Procesador:
         self.lookup_table = ejecutable.getLookupTable()
         self.setRegister(R.IP, ejecutable.getEntryPoint())
         while(self.getIP() < cantInstrucciones):
-            Visualizador().mostrar(ejecutable=ejecutable, registros=self.Registros)
             ejecutable.getInstruccion(self.Registros[R.IP]).ejecutar(self)
+            Visualizador().mostrar(ejecutable=ejecutable, registros=self.Registros)
             self.incrementarIP()
             time.sleep(1)
 
