@@ -3,6 +3,8 @@ from ..models.Ejecutable import Ejecutable
 from ..models.Visualizador import Visualizador
 import time
 
+# TODO: PASAR EJECUTABLE A INSTRUCCIONES
+
 class Procesador:
     def __init__(self):
         self.Registros = {R.AX: 0,
@@ -19,8 +21,8 @@ class Procesador:
         self.lookup_table = ejecutable.getLookupTable()
         self.setRegister(R.IP, ejecutable.getEntryPoint())
         while(self.getIP() < cantInstrucciones):
-            ejecutable.getInstruccion(self.Registros[R.IP]).ejecutar(self)
-            Visualizador().mostrar(ejecutable=ejecutable, registros=self.Registros)
+            ejecutable.getInstruccion(self.Registros[R.IP]).ejecutar(self, ejecutable=ejecutable)
+            Visualizador().mostrar(ejecutable=ejecutable, registros=self.Registros, )
             self.incrementarIP()
             time.sleep(1)
 

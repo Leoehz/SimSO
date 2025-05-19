@@ -18,5 +18,5 @@ class Ejecutable:
     def getInstruccion(self, IP):
         return self.instrucciones[IP]
 
-    def ejecutar(self, IP):
-        self.instrucciones[IP].ejecutar()
+#    def ejecutar(self, IP):
+#        self.instrucciones[IP].ejecutar()

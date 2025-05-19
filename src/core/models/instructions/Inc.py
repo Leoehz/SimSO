@@ -12,7 +12,7 @@ class Inc(Instruccion):
     def __repr__(self):
         return f'Inc({self.param1})'
 
-    def ejecutar(self, procesador):   
+    def ejecutar(self, procesador, ejecutable):   
         dummy = self.param1
         if(type(dummy)==Registro):
             dummy = procesador.getRegister(self.param1) + 1

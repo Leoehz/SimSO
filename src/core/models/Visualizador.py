@@ -2,6 +2,18 @@ from .Ejecutable import Ejecutable
 from .Registro import Registro as R
 from termcolor import colored
 import colorama
+import os
+import platform
+import time
+
+def clear_console():
+    system = platform.system()
+    if system == 'Windows':
+        os.system('cls')
+    elif system == 'Linux' or system == 'Darwin':
+        os.system('clear')
+    else:
+        print("Sistema Operativo no soportado para limpiar la consola.")
 
 class Visualizador:
     def __init__(self):
@@ -12,7 +24,7 @@ class Visualizador:
         listadoInstrucciones = ejecutable.getInstrucciones()
 
         IP = registros[R.IP]
-        chunk = 2
+        chunk = 20
         lower_bound = max(IP-chunk, 0)
         upper_bound = min(IP+chunk, len(listadoInstrucciones)-1)+1
 
@@ -30,3 +42,6 @@ class Visualizador:
         printable = f"\n\n{colored('=== Paso siguiente ===', color='light_cyan')}\n\n{'\n'.join(printableInstructions)}\n\nRegistros {printable_registers}"
 
         print(printable)
+        time.sleep(2)
+
+        clear_console()

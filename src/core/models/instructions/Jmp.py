@@ -12,7 +12,7 @@ class Jmp(Instruccion):
     def __repr__(self):
         return f'Jmp({self.param1})'
 
-    def ejecutar(self, procesador):
+    def ejecutar(self, procesador, ejecutable):
         lookup_table = procesador.getLookupTable()
         procesador.setRegister(Registro.IP, lookup_table[self.param1]-1)
         return

@@ -13,7 +13,7 @@ class Mov(Instruccion):
     def __repr__(self):
         return f'Mov({self.param1}, {self.param2})'
 
-    def ejecutar(self, procesador):
+    def ejecutar(self, procesador, ejecutable):
         if(type(self.param2)==Registro):
             value = procesador.getRegister(self.param2)
         else:
