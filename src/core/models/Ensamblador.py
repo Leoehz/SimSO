@@ -1,2 +1,70 @@
+from utils.validators import valid_line, validate_instruct, validate_params, TypeLine, ENTRYPOINT_LABEL
+from ..models.Ejecutable import Ejecutable
+
 class Ensamblador:
-    pass
+
+	def __init__(self, path):
+		self.path = path
+
+	def compilar(self) -> Ejecutable:
+		instrucciones = []
+		codigo_fuente = []
+		lookup_table = {}
+		entry_point = -1
+		error_flag = False
+		errores = []
+
+		with open(self.path, 'r') as file_to_read:
+			for line in file_to_read:
+				line = line.strip()
+				# Saltear si la linea esta vacia o es un comentario
+				if line == '' or line[0] == '#':
+					continue
+
+				match, type_line = valid_line(line)
+				try:
+					if type_line == TypeLine.inst:
+						inst = str(match.group(1))
+						inst = validate_instruct(inst=inst) # Se obtiene la clase de la instruccion
+						params = str(match.group(2))
+						params_list = params.split(sep=',')
+						params_list = validate_params(inst=inst, params=params_list)
+						
+						instrucciones.append(inst(*params_list))
+						codigo_fuente.append(line)
+					elif type_line == TypeLine.label:
+						inst = validate_instruct(inst='noop')
+						label = str(match.group(1))
+
+						print(label)
+						if label in lookup_table.keys():
+							raise Exception(f'La etiqueta "{label}" se encuentra repetida en el codigo.')
+
+						instrucciones.append(inst(label=label))
+						codigo_fuente.append(line)
+						label_line = len(instrucciones)-1
+						lookup_table[label] = label_line
+
+						if label == ENTRYPOINT_LABEL:
+							entry_point = label_line
+					else:
+						raise SyntaxError('Sintaxis no valida.')
+				except Exception as e:
+					error_txt = f'Error: {e}. Linea: {len(instrucciones)-1} - "{line}". '
+					errores.append(error_txt)
+					error_flag = True
+					continue
+
+		if entry_point == -1:
+			raise Exception(f'El codigo no contiene la etiqueta de inicio de codigo "{ENTRYPOINT_LABEL}"')
+
+		if error_flag:
+			raise Exception(f'Se detectaron errores en la compilacion. Abortando operacion.\nDetalle: {errores}')
+
+		ejecutable = Ejecutable(instrucciones=instrucciones,
+						  		codigo_fuente=codigo_fuente,
+								lookup_table=lookup_table,
+								entry_point=entry_point
+								)
+
+		return ejecutable
