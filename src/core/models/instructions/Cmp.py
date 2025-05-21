@@ -1,5 +1,5 @@
 from interfaces.Instruccion import Instruccion
-from ..Registro import Registro
+from core.models.Registro import Registro
 
 class Cmp(Instruccion):
     N_PARAMS = 2

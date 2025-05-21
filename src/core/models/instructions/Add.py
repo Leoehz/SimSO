@@ -1,6 +1,5 @@
 from interfaces.Instruccion import Instruccion
-from ..Registro import Registro
-from ..Procesador import Procesador
+from core.models.Registro import Registro
 
 class Add(Instruccion):
     N_PARAMS = 2
