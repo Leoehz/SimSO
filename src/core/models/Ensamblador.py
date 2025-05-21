@@ -1,7 +1,7 @@
 import os
 from config import LIBS_FOLDER
 from utils.validators import valid_line, validate_instruct, validate_params, TypeLine, ENTRYPOINT_LABEL
-from core.models.instructions import Noop
+from core.models.instructions import Noop, Jmp
 from core.models.Ejecutable import Ejecutable
 from exceptions import CompilationError, InvalidInclude
 
@@ -56,33 +56,45 @@ class Ensamblador:
 						include_path = os.path.join(os.getcwd(), LIBS_FOLDER, include_file)
 
 						if not os.path.exists(include_path):
-							raise InvalidInclude(f'El archivo {include_file} no existe en la carpeta de librerias. Ruta de librerias: {LIBS_FOLDER}.')
+							raise InvalidInclude(f'El archivo "{include_file}" no existe en la carpeta de librerias. Ruta de librerias: {os.path.join(os.getcwd(), LIBS_FOLDER)}.')
 
 						if include_file in include_list:
-							raise InvalidInclude(f'Referencia circular al intentar importar {include_file} al ensamblar {path}.')
+							raise InvalidInclude(f'Referencia circular intentando importar "{include_file}" al ensamblar {path}.')
 						
 						include_list.append(include_file)
 						include_exec = self.compilar(path=include_path, include_list=include_list)
 
 						new_main_label = f'main_{include_file.replace('.asm', '')}'
 						new_main_noop = Noop(label=new_main_label)
+						len_instrucciones = len(instrucciones)+1
 
 						include_instrucciones = [	new_main_noop if type(x) == Noop and str(x) == 'main:' else x 
 							   						for x in include_exec.getInstrucciones()]
+						
 						include_codigo = [	f'{new_main_label}:' if x == 'main:' else x 
 							   				for x in include_exec.getCodigo()]
+						
+						include_lookup_table = {label if label != 'main' else new_main_label: n_line + len_instrucciones
+							  					for label, n_line in include_exec.getLookupTable().items()}
 
-						inst = validate_instruct(inst='noop')
-						instrucciones.append(inst(label=f'Include("{include_file}")'))
+						instrucciones.append(Jmp(param1=new_main_label, label=f'Include("{include_file}")'))
 						instrucciones.extend(include_instrucciones)
-						instrucciones.append(inst(label=f'EndInclude("{include_file}")'))
+						instrucciones.append(Noop(label=f'EndInclude("{include_file}")'))
 
 						codigo_fuente.append(line)
 						codigo_fuente.extend(include_codigo)
 						codigo_fuente.append('Fin de Include')
 
+						intersect_lookup = [x for x in lookup_table.keys() if x in include_lookup_table.keys()]
+
+						if len(intersect_lookup) > 0:
+							raise InvalidInclude(f'Se detectaron labels de Lookup Table identicas al importar "{include_file}". Labels repetidas: {intersect_lookup}')
+						lookup_table.update(include_lookup_table)
+
 					else:
 						raise SyntaxError('Sintaxis no valida.')
+				except InvalidInclude as e:
+					raise InvalidInclude(e)
 				except Exception as e:
 					error_txt = f'Error: {e}. Linea: {len(instrucciones)-1} - "{line}". '
 					errores.append(error_txt)

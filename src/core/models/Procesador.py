@@ -21,8 +21,8 @@ class Procesador:
         while(self.getIP() < cantInstrucciones):
             Visualizador(time_sleep=0.5).mostrar(ejecutable=ejecutable, registros=self.Registros, )
             ejecutable.getInstruccion(self.Registros[R.IP]).ejecutar(self, ejecutable=ejecutable)
-            Visualizador(time_sleep=0.5).mostrar(ejecutable=ejecutable, registros=self.Registros, )
             self.incrementarIP()
+            Visualizador(time_sleep=0.5).mostrar(ejecutable=ejecutable, registros=self.Registros, )
             time.sleep(1)
 
     def incrementarIP(self):

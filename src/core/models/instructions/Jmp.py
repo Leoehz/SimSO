@@ -6,11 +6,15 @@ class Jmp(Instruccion):
     SYNTAX = 'jmp'
     PARAMS_TYPE = [(str,)]
 
-    def __init__(self, param1):
+    def __init__(self, param1, label: str = None):
         self.param1 = param1
+        self.label = label
 
     def __repr__(self):
-        return f'Jmp("{self.param1}")'
+        if self.label is not None:
+            return f'{self.label}'
+        else:
+            return f'Jmp("{self.param1}")'
 
     def ejecutar(self, procesador, ejecutable):
         lookup_table = ejecutable.getLookupTable()

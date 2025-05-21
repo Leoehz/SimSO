@@ -23,7 +23,7 @@ class Visualizador:
 
     def mostrar(self, ejecutable: Ejecutable, registros: dict):
         clear_console()
-        listadoInstrucciones = ejecutable.getInstrucciones()
+        listadoInstrucciones = list(enumerate(ejecutable.getInstrucciones()))
 
         IP = registros[R.IP]
         chunk = 20
@@ -31,7 +31,7 @@ class Visualizador:
         upper_bound = min(IP+chunk, len(listadoInstrucciones)-1)+1
 
         visibleChunk = listadoInstrucciones[lower_bound:upper_bound]
-        printableInstructions = [f'\t{instruction}' for instruction in visibleChunk]
+        printableInstructions = [f'\t{linea}\t{instruction}' for linea, instruction in visibleChunk]
 
         if IP < chunk:
             printable_IP = IP
@@ -41,7 +41,7 @@ class Visualizador:
         printableInstructions[printable_IP] = colored(f'>{printableInstructions[printable_IP]}', color='green')
         printable_registers = {x.name: value for x, value in registros.items()}
 
-        printable = f"\n\n{colored(f'=== Archivo {ejecutable.getName()} ===', color='light_cyan')}\n\n{'\n'.join(printableInstructions)}\n\nRegistros {printable_registers}"
+        printable = f"\n\n{colored(f'=== Archivo {ejecutable.getName()} ===', color='light_cyan')}\n\n{'\n'.join(printableInstructions)}\n\nRegistros {printable_registers}\n\nLabels {ejecutable.getLookupTable()}"
 
         print(printable)
         time.sleep(self.time_sleep)
