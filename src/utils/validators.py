@@ -15,7 +15,9 @@ inst_factory = {inst.SYNTAX: inst for inst in instrucciones_validas}
 ENTRYPOINT_LABEL = 'main'
 
 ### Revisa las instrucciones validas seguidas de espacios y luego los parametros
-inst_pattern = f"^({'|'.join([inst.SYNTAX for inst in instrucciones_validas])})" + r"\s*([\w,\s]*)"
+inst_pattern = f"^({'|'.join([inst.SYNTAX for inst in instrucciones_validas])})" + r"\s+([\w,\s]*)"
+# Identifica un Include
+include_pattern = r'include "(\w+[.]asm)"'
 # Identifica una etiqueta
 label_pattern = r"(\w+):"
 
@@ -23,8 +25,14 @@ class TypeLine(Enum):
     NULL = 0
     inst = 1
     label = 2
+    include = 3
 
 def valid_line(line: str) -> Tuple[re.Match, TypeLine]:
+
+    match = re.search(include_pattern, line)
+    if match:
+        return (match, TypeLine.include)
+
     match = re.search(inst_pattern, line)
     if match:
         return (match, TypeLine.inst)
@@ -32,6 +40,7 @@ def valid_line(line: str) -> Tuple[re.Match, TypeLine]:
     match = re.search(label_pattern, line)
     if match:
         return (match, TypeLine.label)
+    
     return (match, TypeLine.NULL)
 
 def validate_instruct(inst: str) -> object:

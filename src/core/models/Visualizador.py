@@ -16,11 +16,13 @@ def clear_console():
         print("Sistema Operativo no soportado para limpiar la consola.")
 
 class Visualizador:
-    def __init__(self):
+    def __init__(self, time_sleep: int = 1):
+        self.time_sleep = time_sleep
         colorama.init()
         pass
 
     def mostrar(self, ejecutable: Ejecutable, registros: dict):
+        clear_console()
         listadoInstrucciones = ejecutable.getInstrucciones()
 
         IP = registros[R.IP]
@@ -39,9 +41,7 @@ class Visualizador:
         printableInstructions[printable_IP] = colored(f'>{printableInstructions[printable_IP]}', color='green')
         printable_registers = {x.name: value for x, value in registros.items()}
 
-        printable = f"\n\n{colored('=== Paso siguiente ===', color='light_cyan')}\n\n{'\n'.join(printableInstructions)}\n\nRegistros {printable_registers}"
+        printable = f"\n\n{colored(f'=== Archivo {ejecutable.getName()} ===', color='light_cyan')}\n\n{'\n'.join(printableInstructions)}\n\nRegistros {printable_registers}"
 
         print(printable)
-        time.sleep(2)
-
-        clear_console()
+        time.sleep(self.time_sleep)
