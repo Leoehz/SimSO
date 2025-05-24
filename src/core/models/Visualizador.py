@@ -42,6 +42,6 @@ class Visualizador:
         printable = f"\n\n{colored('=== Paso siguiente ===', color='light_cyan')}\n\n{'\n'.join(printableInstructions)}\n\nRegistros {printable_registers}"
 
         print(printable)
-        time.sleep(2)
+        time.sleep(1)
 
         clear_console()

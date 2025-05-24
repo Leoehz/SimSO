@@ -1,6 +1,7 @@
 from ..models.Registro import Registro as R
 from ..models.Ejecutable import Ejecutable
 from ..models.Visualizador import Visualizador
+from ..models.Proceso import Proceso
 import time
 
 # TODO: PASAR EJECUTABLE A INSTRUCCIONES
@@ -14,9 +15,12 @@ class Procesador:
                           R.IP: 0,
                           R.FLAG: 0}
         self.lookup_table = {}
+        self.proceso = None
 
     # Mientras haya instrucciones segui ejecutando    
-    def ejecutar(self, ejecutable: Ejecutable):
+    def ejecutar(self, proceso: Proceso):
+        self.proceso = proceso
+        ejecutable = proceso.getEjecutable()
         cantInstrucciones = len(ejecutable.getInstrucciones())
         self.lookup_table = ejecutable.getLookupTable()
         self.setRegister(R.IP, ejecutable.getEntryPoint())
@@ -41,3 +45,6 @@ class Procesador:
     
     def getIP(self):
         return self.getRegister(R.IP)
+
+    def getProceso(self):
+        return self.proceso

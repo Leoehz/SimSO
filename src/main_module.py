@@ -2,13 +2,16 @@ from core.models.instructions import Mov
 from core.models.Ensamblador import Ensamblador
 from core.models.Procesador import Procesador
 from core.models.Registro import Registro as R
+from core.models.Proceso import Proceso
 
 Mov(1, 2)
 #ens = Ensamblador(path=r'.\asm\mov2.asm')
 #ens = Ensamblador(path=r'.\asm\add.asm')
-ens = Ensamblador(path=r'.\asm\add_inc_cmp.asm')
+#ens = Ensamblador(path=r'.\asm\add_inc_cmp.asm')
+ens = Ensamblador(path=r'.\asm\test_stack.asm')
 
 ejecutable = ens.compilar()
 procesador = Procesador()
+proceso = Proceso(ejecutable)
 
-procesador.ejecutar(ejecutable=ejecutable)
+procesador.ejecutar(proceso=proceso)

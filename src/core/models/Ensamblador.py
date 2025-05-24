@@ -25,6 +25,7 @@ class Ensamblador:
 				try:
 					if type_line == TypeLine.inst:
 						inst = str(match.group(1))
+						#print(match)
 						inst = validate_instruct(inst=inst) # Se obtiene la clase de la instruccion
 						params = str(match.group(2))
 						params_list = params.split(sep=',')
@@ -36,7 +37,7 @@ class Ensamblador:
 						inst = validate_instruct(inst='noop')
 						label = str(match.group(1))
 
-						print(label)
+						#print(label)
 						if label in lookup_table.keys():
 							raise Exception(f'La etiqueta "{label}" se encuentra repetida en el codigo.')
 
@@ -47,6 +48,14 @@ class Ensamblador:
 
 						if label == ENTRYPOINT_LABEL:
 							entry_point = label_line
+
+					elif type_line == TypeLine.ret:
+						print(match)
+						inst = str(match.group(1))
+						print(inst)
+						inst = validate_instruct(inst=inst)
+						instrucciones.append(inst())
+						codigo_fuente.append(line)
 					else:
 						raise SyntaxError('Sintaxis no valida.')
 				except Exception as e:
