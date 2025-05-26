@@ -1,9 +1,4 @@
-from core.models.Registro import Registro as R
 from core.models.Ejecutable import Ejecutable
-
-import time
-
-# TODO: PASAR EJECUTABLE A INSTRUCCIONES
 
 class Proceso:
     def __init__(self, ejecutable: Ejecutable):

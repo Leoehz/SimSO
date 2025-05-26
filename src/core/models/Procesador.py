@@ -23,10 +23,10 @@ class Procesador:
         self.lookup_table = ejecutable.getLookupTable()
         self.setRegister(R.IP, ejecutable.getEntryPoint())
         while(self.getIP() < cantInstrucciones):
-            Visualizador(time_sleep=0.5).mostrar(ejecutable=ejecutable, registros=self.Registros, )
+            Visualizador(time_sleep=0.25).mostrar(ejecutable=ejecutable, registros=self.Registros, stack=proceso.stack)
             ejecutable.getInstruccion(self.Registros[R.IP]).ejecutar(self, ejecutable=ejecutable)
             self.incrementarIP()
-            Visualizador(time_sleep=0.5).mostrar(ejecutable=ejecutable, registros=self.Registros, )
+            Visualizador(time_sleep=0.25).mostrar(ejecutable=ejecutable, registros=self.Registros, stack=proceso.stack)
             time.sleep(1)
 
     def incrementarIP(self):
@@ -49,6 +49,3 @@ class Procesador:
 
     def getProceso(self):
         return self.proceso
-
-    def getLookupTable(self):
-        return self.lookup_table

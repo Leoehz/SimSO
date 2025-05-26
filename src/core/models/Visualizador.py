@@ -21,7 +21,7 @@ class Visualizador:
         colorama.init()
         pass
 
-    def mostrar(self, ejecutable: Ejecutable, registros: dict):
+    def mostrar(self, ejecutable: Ejecutable, registros: dict, stack: list):
         clear_console()
         listadoInstrucciones = list(enumerate(ejecutable.getInstrucciones()))
 
@@ -41,7 +41,7 @@ class Visualizador:
         printableInstructions[printable_IP] = colored(f'>{printableInstructions[printable_IP]}', color='green')
         printable_registers = {x.name: value for x, value in registros.items()}
 
-        printable = f"\n\n{colored(f'=== Archivo {ejecutable.getName()} ===', color='light_cyan')}\n\n{'\n'.join(printableInstructions)}\n\nRegistros {printable_registers}\n\nLabels {ejecutable.getLookupTable()}"
+        printable = f"\n\n{colored(f'=== Archivo {ejecutable.getName()} ===', color='light_cyan')}\n\n{'\n'.join(printableInstructions)}\n\nRegistros {printable_registers}\n\nLabels {ejecutable.getLookupTable()}\n\nStack: {stack}"
 
         print(printable)
         time.sleep(self.time_sleep)

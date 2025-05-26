@@ -11,7 +11,8 @@ Mov(1, 2)
 #ens = Ensamblador(path=r'.\asm\test_stack.asm')
 ens = Ensamblador()
 
-ejecutable = ens.compilar(path=r'.\asm\test_stack.asm')
+#ejecutable = ens.compilar(path=r'.\asm\test_stack.asm')
+ejecutable = ens.compilar(path=r'.\asm\include.asm')
 procesador = Procesador()
 proceso = Proceso(ejecutable)
 
