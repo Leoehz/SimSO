@@ -1,6 +1,7 @@
 from core.models.Registro import Registro as R
 from core.models.Ejecutable import Ejecutable
 from core.models.Visualizador import Visualizador
+from core.models.Proceso import Proceso
 import time
 
 class Procesador:
@@ -12,11 +13,14 @@ class Procesador:
                                             R.FLAG: 0}
                 ):
         self.Registros = Registros
+        self.proceso = None
 
     # Mientras haya instrucciones segui ejecutando    
-    def ejecutar(self, ejecutable: Ejecutable):
+    def ejecutar(self, proceso: Proceso):
+        self.proceso = proceso
+        ejecutable = proceso.getEjecutable()
         cantInstrucciones = len(ejecutable.getInstrucciones())
-
+        self.lookup_table = ejecutable.getLookupTable()
         self.setRegister(R.IP, ejecutable.getEntryPoint())
         while(self.getIP() < cantInstrucciones):
             Visualizador(time_sleep=0.5).mostrar(ejecutable=ejecutable, registros=self.Registros, )
@@ -42,3 +46,9 @@ class Procesador:
     
     def getIP(self):
         return self.getRegister(R.IP)
+
+    def getProceso(self):
+        return self.proceso
+
+    def getLookupTable(self):
+        return self.lookup_table

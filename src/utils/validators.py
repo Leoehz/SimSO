@@ -8,9 +8,13 @@ from core.models.instructions import (Mov,
                                       Jmp,
                                       Jnz,
                                       Cmp,
-                                      Noop)
+                                      Noop,
+                                      Push,
+                                      Pop,
+                                      Call,
+                                      Ret)
 
-instrucciones_validas = [Mov, Add, Inc, Dec, Jmp, Jnz, Cmp, Noop]
+instrucciones_validas = [Mov, Add, Inc, Dec, Jmp, Jnz, Cmp, Noop, Push, Pop, Call, Ret]
 inst_factory = {inst.SYNTAX: inst for inst in instrucciones_validas}
 ENTRYPOINT_LABEL = 'main'
 
@@ -21,11 +25,14 @@ include_pattern = r'include "(\w+[.]asm)"'
 # Identifica una etiqueta
 label_pattern = r"(\w+):"
 
+ret_pattern = "ret"
+
 class TypeLine(Enum):
     NULL = 0
     inst = 1
     label = 2
     include = 3
+    ret = 4
 
 def valid_line(line: str) -> Tuple[re.Match, TypeLine]:
 
@@ -40,6 +47,10 @@ def valid_line(line: str) -> Tuple[re.Match, TypeLine]:
     match = re.search(label_pattern, line)
     if match:
         return (match, TypeLine.label)
+
+    match = re.search(ret_pattern, line)
+    if match:
+        return (match, TypeLine.ret)
     
     return (match, TypeLine.NULL)
 

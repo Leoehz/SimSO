@@ -90,6 +90,12 @@ class Ensamblador:
 						if len(intersect_lookup) > 0:
 							raise InvalidInclude(f'Se detectaron labels de Lookup Table identicas al importar "{include_file}". Labels repetidas: {intersect_lookup}')
 						lookup_table.update(include_lookup_table)
+					
+					elif type_line == TypeLine.ret:
+						inst = str(match.group(0))
+						inst = validate_instruct(inst=inst)
+						instrucciones.append(inst())
+						codigo_fuente.append(line)
 
 					else:
 						raise SyntaxError('Sintaxis no valida.')
