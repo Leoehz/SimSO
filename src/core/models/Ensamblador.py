@@ -10,7 +10,7 @@ class Ensamblador:
 	def __init__(self):
 		pass
 
-	def compilar(self, path: str, include_list: list = []) -> Ejecutable:
+	def compilar(self, path: str, include_list: list = [], ignore_entry_point: bool = False) -> Ejecutable:
 		instrucciones = []
 		codigo_fuente = []
 		lookup_table = {}
@@ -62,28 +62,27 @@ class Ensamblador:
 							raise InvalidInclude(f'Referencia circular intentando importar "{include_file}" al ensamblar {path}.')
 						
 						include_list.append(include_file)
-						include_exec = self.compilar(path=include_path, include_list=include_list)
+						include_exec = self.compilar(path=include_path, include_list=include_list, ignore_entry_point=True)
 
-						new_main_label = f'main_{include_file.replace('.asm', '')}'
-						new_main_noop = Noop(label=new_main_label)
+						end_include_label = f'fin_include_{include_file.replace('.asm', '')}'
 						len_instrucciones = len(instrucciones)+1
 
-						include_instrucciones = [	new_main_noop if type(x) == Noop and str(x) == 'main:' else x 
-							   						for x in include_exec.getInstrucciones()]
+						include_instrucciones = [inst for inst in include_exec.getInstrucciones()]
 						
-						include_codigo = [	f'{new_main_label}:' if x == 'main:' else x 
-							   				for x in include_exec.getCodigo()]
+						include_codigo = [cod for cod in include_exec.getCodigo()]
 						
-						include_lookup_table = {label if label != 'main' else new_main_label: n_line + len_instrucciones
+						include_lookup_table = {label: n_line + len_instrucciones
 							  					for label, n_line in include_exec.getLookupTable().items()}
 
-						instrucciones.append(Jmp(param1=new_main_label, label=f'Include("{include_file}")'))
+						instrucciones.append(Jmp(param1=end_include_label, label=f'Include("{include_file}")'))
 						instrucciones.extend(include_instrucciones)
 						instrucciones.append(Noop(label=f'EndInclude("{include_file}")'))
 
 						codigo_fuente.append(line)
 						codigo_fuente.extend(include_codigo)
-						codigo_fuente.append('Fin de Include')
+						codigo_fuente.append(f'{end_include_label}:')
+
+						include_lookup_table[end_include_label] = len(instrucciones)-1
 
 						intersect_lookup = [x for x in lookup_table.keys() if x in include_lookup_table.keys()]
 
@@ -107,7 +106,7 @@ class Ensamblador:
 					error_flag = True
 					continue
 
-		if entry_point == -1:
+		if not ignore_entry_point and entry_point == -1:
 			raise CompilationError(f'El codigo no contiene la etiqueta de inicio de codigo "{ENTRYPOINT_LABEL}"')
 
 		if error_flag:

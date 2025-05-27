@@ -1,3 +1,2 @@
-main:
-    inc bx
-    dec bx
+inc bx
+dec bx

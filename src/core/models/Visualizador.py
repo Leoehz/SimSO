@@ -23,7 +23,7 @@ class Visualizador:
 
     def mostrar(self, ejecutable: Ejecutable, registros: dict, stack: list):
         clear_console()
-        listadoInstrucciones = list(enumerate(ejecutable.getInstrucciones()))
+        listadoInstrucciones = list(enumerate(ejecutable.getCodigo()))
 
         IP = registros[R.IP]
         chunk = 20
