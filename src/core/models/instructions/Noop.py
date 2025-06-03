@@ -16,5 +16,5 @@ class Noop(Instruccion):
             return f'Noop()'
 
 
-    def ejecutar(self, procesador, ejecutable):
+    def ejecutar(self, procesador):
         return

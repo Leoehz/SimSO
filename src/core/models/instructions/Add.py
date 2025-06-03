@@ -13,7 +13,7 @@ class Add(Instruccion):
     def __repr__(self):
         return f'Add({self.param1}, {self.param2})'
 
-    def ejecutar(self, procesador, ejecutable):
+    def ejecutar(self, procesador):
         dummy = self.param2
         if(type(dummy)==Registro):
             dummy = procesador.getRegister(self.param2) + procesador.getRegister(self.param1)

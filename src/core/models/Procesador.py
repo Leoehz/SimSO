@@ -2,6 +2,7 @@ from core.models.Registro import Registro as R
 from core.models.Ejecutable import Ejecutable
 from core.models.Visualizador import Visualizador
 from core.models.Proceso import Proceso
+from core.models.PreservadorIP import PreservadorIP
 import time
 
 class Procesador:
@@ -24,7 +25,7 @@ class Procesador:
         self.setRegister(R.IP, ejecutable.getEntryPoint())
         while(self.getIP() < cantInstrucciones):
             Visualizador(time_sleep=0.25).mostrar(ejecutable=ejecutable, registros=self.Registros, stack=proceso.stack)
-            ejecutable.getInstruccion(self.Registros[R.IP]).ejecutar(self, ejecutable=ejecutable)
+            ejecutable.getInstruccion(self.Registros[R.IP]).ejecutar(self)
             self.incrementarIP()
             Visualizador(time_sleep=0.25).mostrar(ejecutable=ejecutable, registros=self.Registros, stack=proceso.stack)
             time.sleep(1)
@@ -49,3 +50,13 @@ class Procesador:
 
     def getProceso(self):
         return self.proceso
+
+    def setPreservadorIP(self, valor):
+        self.preservador = PreservadorIP()
+        self.preservador.setValorIP(valor)
+
+    def delPreservador(self):
+        del self.preservador
+
+    def getPreservadorIP(self):
+        return self.preservador

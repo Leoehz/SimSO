@@ -12,9 +12,12 @@ class Call(Instruccion):
     def __repr__(self):
         return f'Call({self.param1})'
 
-    def ejecutar(self, procesador, ejecutable):
-        lookup_table = procesador.getLookupTable()
+    def ejecutar(self, procesador):
+        lookup_table = procesador.getProceso().getEjecutable().getLookupTable()
         proceso = procesador.getProceso()
-        proceso.pushValorStack(procesador.getRegister(Registro.IP))
-        procesador.setRegister(Registro.IP, lookup_table[self.param1] - 1)
+        registro = Registro.IP
+        valor = procesador.getRegister(registro)
+        procesador.setPreservadorIP(valor)
+        proceso.pushValorStack(valor)
+        procesador.setRegister(registro, lookup_table[self.param1] - 1)
         return

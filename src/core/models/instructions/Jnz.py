@@ -12,8 +12,9 @@ class Jnz(Instruccion):
     def __repr__(self):
         return f'Jmz("{self.param1}")'
 
-    def ejecutar(self, procesador, ejecutable):
+    def ejecutar(self, procesador):
         if procesador.getRegister(Registro.FLAG) == 1:
+            ejecutable = procesador.getProceso().getEjecutable()
             lookup_table = ejecutable.getLookupTable()
             procesador.setRegister(Registro.IP, lookup_table[self.param1]-1)
         return

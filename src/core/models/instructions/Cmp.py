@@ -13,7 +13,7 @@ class Cmp(Instruccion):
     def __repr__(self):
         return f'Cmp({self.param1}, {self.param2})'
 
-    def ejecutar(self, procesador, ejecutable):
+    def ejecutar(self, procesador):
         dummy = self.param2
         flag = 0
         if(type(dummy) == Registro):

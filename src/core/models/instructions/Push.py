@@ -13,7 +13,7 @@ class Push(Instruccion):
     def __repr__(self):
         return f'Push({self.param1})'
 
-    def ejecutar(self, procesador, ejecutable):
+    def ejecutar(self, procesador):
         dummy = self.param1
         if(type(dummy)==Registro):
             dummy = procesador.getRegister(self.param1)

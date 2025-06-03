@@ -13,7 +13,7 @@ class Pop(Instruccion):
     def __repr__(self):
         return f'Pop({self.param1})'
 
-    def ejecutar(self, procesador, ejecutable):
+    def ejecutar(self, procesador):
         try:
             dummy = procesador.getProceso().popValorStack()
         except:

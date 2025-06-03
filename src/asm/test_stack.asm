@@ -1,5 +1,5 @@
 sumar:
-    pop bx
+    #pop bx
     pop cx
     pop dx
     push bx
