@@ -1,0 +1,2 @@
+inc bx
+dec bx

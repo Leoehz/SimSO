@@ -1,5 +1,5 @@
 from interfaces.Instruccion import Instruccion
-from ..Registro import Registro
+from core.models.Registro import Registro
 
 class Jnz(Instruccion):
     N_PARAMS = 1
@@ -10,10 +10,11 @@ class Jnz(Instruccion):
         self.param1 = param1
 
     def __repr__(self):
-        return f'Jmz({self.param1})'
+        return f'Jmz("{self.param1}")'
 
-    def ejecutar(self, procesador, ejecutable):
+    def ejecutar(self, procesador):
         if procesador.getRegister(Registro.FLAG) == 1:
-            lookup_table = procesador.getLookupTable()
+            ejecutable = procesador.getProceso().getEjecutable()
+            lookup_table = ejecutable.getLookupTable()
             procesador.setRegister(Registro.IP, lookup_table[self.param1]-1)
         return

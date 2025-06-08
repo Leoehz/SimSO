@@ -6,3 +6,7 @@ from .Jmp import Jmp
 from .Jnz import Jnz
 from .Cmp import Cmp
 from .Noop import Noop
+from .Push import Push
+from .Pop import Pop
+from .Call import Call
+from .Ret import Ret

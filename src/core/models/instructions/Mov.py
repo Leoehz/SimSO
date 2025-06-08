@@ -1,5 +1,5 @@
 from interfaces.Instruccion import Instruccion
-from ..Registro import Registro
+from core.models.Registro import Registro
 
 class Mov(Instruccion):
     N_PARAMS = 2
@@ -13,7 +13,7 @@ class Mov(Instruccion):
     def __repr__(self):
         return f'Mov({self.param1}, {self.param2})'
 
-    def ejecutar(self, procesador, ejecutable):
+    def ejecutar(self, procesador):
         if(type(self.param2)==Registro):
             value = procesador.getRegister(self.param2)
         else:
