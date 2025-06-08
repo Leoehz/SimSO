@@ -28,15 +28,20 @@ class Procesador:
             ejecutable = self.proceso.getEjecutable()
             self.cantInstrucciones = len(ejecutable.getInstrucciones())
             Visualizador(time_sleep=0.25).mostrar(ejecutable=ejecutable, registros=self.Registros, stack=self.proceso.stack)
+            try:
+                label = ejecutable.getInstruccion(self.Registros[R.IP]).label
+                esInstruccion = False
+            except:
+                esInstruccion = True
             ejecutable.getInstruccion(self.Registros[R.IP]).ejecutar(self)
             self.incrementarIP()
-            self.sistema.clockHandler()
+            self.sistema.clockHandler(esInstruccion)
 
-            #Visualizador(time_sleep=0.25).mostrar(ejecutable=ejecutable, registros=self.Registros, stack=proceso.stack)
+            #Visualizador(time_sleep=0.25).mostrar(ejecutable=ejecutable, registros=self.Registros, stack=self.proceso.stack)
             time.sleep(1)
 
     def procesoTerminado(self):
-        print(self.getIP(), self.cantInstrucciones)
+        #print(self.getIP(), self.cantInstrucciones)
         return self.getIP() == self.cantInstrucciones
 
     def detenerProcesoActual(self):

@@ -12,7 +12,7 @@ class Proceso:
                             R.DX: 0,
                             R.IP: 0,
                             R.FLAG: 0}
-        self.estado = Estado.ACTIVO
+        self.estado = Estado.BLOQUEADO
 
     # Mientras haya instrucciones segui ejecutando    
     def getEjecutable(self):

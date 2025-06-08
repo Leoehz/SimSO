@@ -18,7 +18,7 @@ def main(argv, arc):
 	print(argv)
 	for arg in argv:
 		ejecutable = ens.compilar(path=arg.replace('\\', '/'))
-		print(ejecutable.getInstrucciones())
+		#print(ejecutable.getInstrucciones())
 		#ejecutable = ens.compilar(path=r'.\asm\include.asm')
 		ejecutables.append(ejecutable)
 		
