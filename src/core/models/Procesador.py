@@ -3,6 +3,7 @@ from core.models.Ejecutable import Ejecutable
 from core.models.Visualizador import Visualizador
 from core.models.Proceso import Proceso
 from core.models.PreservadorIP import PreservadorIP
+from core.models.Estado import Estado
 import time
 
 class Procesador:
@@ -15,20 +16,31 @@ class Procesador:
                 ):
         self.Registros = Registros
         self.proceso = None
+        self.estado = Estado.ACTIVO
 
     # Mientras haya instrucciones segui ejecutando    
-    def ejecutar(self, proceso: Proceso):
+    def ejecutarProceso(self, proceso: Proceso):
         self.proceso = proceso
-        ejecutable = proceso.getEjecutable()
-        cantInstrucciones = len(ejecutable.getInstrucciones())
-        self.lookup_table = ejecutable.getLookupTable()
-        self.setRegister(R.IP, ejecutable.getEntryPoint())
-        while(self.getIP() < cantInstrucciones):
-            Visualizador(time_sleep=0.25).mostrar(ejecutable=ejecutable, registros=self.Registros, stack=proceso.stack)
+        self.Registros = proceso.obtenerContexto()
+
+    def procesar(self):
+        while(self.estado == Estado.ACTIVO):
+            ejecutable = self.proceso.getEjecutable()
+            self.cantInstrucciones = len(ejecutable.getInstrucciones())
+            Visualizador(time_sleep=0.25).mostrar(ejecutable=ejecutable, registros=self.Registros, stack=self.proceso.stack)
             ejecutable.getInstruccion(self.Registros[R.IP]).ejecutar(self)
             self.incrementarIP()
-            Visualizador(time_sleep=0.25).mostrar(ejecutable=ejecutable, registros=self.Registros, stack=proceso.stack)
+            self.sistema.clockHandler()
+
+            #Visualizador(time_sleep=0.25).mostrar(ejecutable=ejecutable, registros=self.Registros, stack=proceso.stack)
             time.sleep(1)
+
+    def procesoTerminado(self):
+        print(self.getIP(), self.cantInstrucciones)
+        return self.getIP() == self.cantInstrucciones
+
+    def detenerProcesoActual(self):
+        self.proceso.guardarContexto(self.Registros)
 
     def incrementarIP(self):
         self.Registros[R.IP] += 1
@@ -60,3 +72,6 @@ class Procesador:
 
     def getPreservadorIP(self):
         return self.preservador
+
+    def setSistemaOperativo(self, sistema):
+        self.sistema = sistema

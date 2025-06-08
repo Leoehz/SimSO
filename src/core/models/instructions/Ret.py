@@ -1,6 +1,6 @@
 from interfaces.Instruccion import Instruccion
 from ..Registro import Registro
-from exceptions import IPIntegrityViolation
+#from exceptions import IPIntegrityViolation
 import time
 
 class Ret(Instruccion):
