@@ -25,6 +25,8 @@ include_pattern = r'include "(\w+[.]asm)"'
 # Identifica una etiqueta
 label_pattern = r"(\w+):"
 
+noop = 'noop'
+
 ret_pattern = "ret"
 
 class TypeLine(Enum):
@@ -33,6 +35,7 @@ class TypeLine(Enum):
     label = 2
     include = 3
     ret = 4
+    noop = 5
 
 def valid_line(line: str) -> Tuple[re.Match, TypeLine]:
 
@@ -47,6 +50,10 @@ def valid_line(line: str) -> Tuple[re.Match, TypeLine]:
     match = re.search(label_pattern, line)
     if match:
         return (match, TypeLine.label)
+
+    match = re.search(noop, line)
+    if match:
+        return (match, TypeLine.noop)
 
     match = re.search(ret_pattern, line)
     if match:

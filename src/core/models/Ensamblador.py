@@ -96,6 +96,12 @@ class Ensamblador:
 						instrucciones.append(inst())
 						codigo_fuente.append(line)
 
+					elif type_line == TypeLine.noop:
+						inst = str(match.group(0))
+						inst = validate_instruct(inst=inst)
+						instrucciones.append(inst())
+						codigo_fuente.append(line)
+
 					else:
 						raise SyntaxError('Sintaxis no valida.')
 				except InvalidInclude as e:
