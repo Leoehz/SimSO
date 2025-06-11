@@ -18,8 +18,5 @@ class Push(Instruccion):
         if(type(dummy)==Registro):
             dummy = procesador.getRegister(self.param1)
         procesador.getProceso().pushValorStack(dummy)
+        procesador.incrementarIP()
         return
-        #return self.param1
-    
-    def get_params(self):
-        return self.n_params

@@ -20,8 +20,5 @@ class Pop(Instruccion):
             print("La pila está vacía, se devuelve 0.")
             dummy = 0
         procesador.setRegister(self.param1, dummy)
+        procesador.incrementarIP()
         return
-        #return self.param1
-    
-    def get_params(self):
-        return self.n_params

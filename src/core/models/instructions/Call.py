@@ -19,5 +19,5 @@ class Call(Instruccion):
         valor = procesador.getRegister(registro)
         procesador.setPreservadorIP(valor)
         proceso.pushValorStack(valor)
-        procesador.setRegister(registro, lookup_table[self.param1] - 1)
+        procesador.setRegister(registro, lookup_table[self.param1])
         return

@@ -18,5 +18,6 @@ class Inc(Instruccion):
             dummy = procesador.getRegister(self.param1) + 1
             procesador.setRegister(self.param1, dummy)       
         else:
-            dummy += 1   
+            dummy += 1
+        procesador.incrementarIP()
         return

@@ -19,5 +19,5 @@ class Jmp(Instruccion):
     def ejecutar(self, procesador):
         ejecutable = procesador.getProceso().getEjecutable()
         lookup_table = ejecutable.getLookupTable()
-        procesador.setRegister(Registro.IP, lookup_table[self.param1]-1)
+        procesador.setRegister(Registro.IP, lookup_table[self.param1])
         return

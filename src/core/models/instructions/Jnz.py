@@ -16,5 +16,5 @@ class Jnz(Instruccion):
         if procesador.getRegister(Registro.FLAG) == 1:
             ejecutable = procesador.getProceso().getEjecutable()
             lookup_table = ejecutable.getLookupTable()
-            procesador.setRegister(Registro.IP, lookup_table[self.param1]-1)
+            procesador.setRegister(Registro.IP, lookup_table[self.param1])
         return

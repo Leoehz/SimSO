@@ -10,8 +10,9 @@ class Proceso:
                             R.BX: 0,
                             R.CX: 0,
                             R.DX: 0,
-                            R.IP: 0,
-                            R.FLAG: 0}
+                            R.IP: ejecutable.getEntryPoint(),
+                            R.FLAG: 0
+                        }
         self.estado = Estado.BLOQUEADO
 
     # Mientras haya instrucciones segui ejecutando    

@@ -5,41 +5,47 @@ from core.models.Estado import Estado
 
 class SistemaOperativo:
     def __init__(self, ejecutables: Ejecutable, procesador: Procesador):
-        self.procesos = []
+        self.procesos = [Proceso(ejecutable) for ejecutable in ejecutables]
         self.procesador = procesador
         self.rafagaInstrucciones = 3
         self.cantInstrucciones = 1
         self.procesoActivo = 0
-        for ejecutable in ejecutables:
-            self.procesos.append(Proceso(ejecutable))
+        self.finEjecucion = False
+
         self.procesador.ejecutarProceso(self.procesos[self.procesoActivo])
 
-    # Mientras haya instrucciones segui ejecutando    
-    def clockHandler(self, esInstruccion):
-        if (self.cantInstrucciones == self.rafagaInstrucciones or self.procesador.procesoTerminado()):
-            if (self.procesador.procesoTerminado()):
-                self.procesador.getProceso().setEstado(Estado.FINALIZADO)
-            else:
-                self.procesador.getProceso().setEstado(Estado.BLOQUEADO)
+    def buscarSiguienteProceso(self):
+        encontre_siguiente = False
+        while not encontre_siguiente:
+            self.procesoActivo = (self.procesoActivo+1) % len(self.procesos) 
+            if(self.procesos[self.procesoActivo].estado == Estado.BLOQUEADO):
+                encontre_siguiente = True
+        self.procesador.ejecutarProceso(self.procesos[self.procesoActivo])
+        self.cantInstrucciones = 0
 
-            self.procesador.detenerProcesoActual()
-            
-            encontre = False
-            while (not encontre):
-                self.procesoActivo = (self.procesoActivo+1) % len(self.procesos) 
-                if(self.procesos[self.procesoActivo].estado == Estado.BLOQUEADO):
-                    encontre = True
-                    #print(self.procesoActivo)
-            if(encontre):
-                self.procesador.ejecutarProceso(self.procesos[self.procesoActivo])
-                self.cantInstrucciones = 0
+    # Mientras haya instrucciones segui ejecutando    
+    def clockHandler(self):
+
+        if self.finEjecucion:
+            return True
+
+        proceso = self.procesador.getProceso()
+
+        if self.procesador.procesoTerminado():
+            proceso.setEstado(Estado.FINALIZADO)
+
+            if all([p.getEstado() == Estado.FINALIZADO for p in self.procesos]):
+                self.finEjecucion = True
+                return True
             else:
-                self.procesador.setEstado(Estado.INACTIVO)
+                self.buscarSiguienteProceso()
+
+        elif (self.cantInstrucciones == self.rafagaInstrucciones):
+            proceso.setEstado(Estado.BLOQUEADO)
+            self.procesador.detenerProcesoActual()
+            self.buscarSiguienteProceso()
             
-                
-        else:
-            pass
-        if(esInstruccion):
-            self.cantInstrucciones+=1
+        self.cantInstrucciones += 1
+        return False
 
 

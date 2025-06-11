@@ -19,4 +19,5 @@ class Mov(Instruccion):
         else:
             value = self.param2
         procesador.setRegister(registro=self.param1, value=value)
+        procesador.incrementarIP()
         return

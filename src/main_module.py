@@ -4,7 +4,9 @@ from core.models.Procesador import Procesador
 from core.models.Registro import Registro as R
 from core.models.Proceso import Proceso
 from core.models.SistemaOperativo import SistemaOperativo
+from config import BASE_ASM_FOLDER
 import sys
+import os
 
 #Mov(1, 2)
 #ens = Ensamblador(path=r'.\asm\mov2.asm')
@@ -17,12 +19,10 @@ def main(argv, arc):
 	ejecutables = []
 	print(argv)
 	for arg in argv:
-		ejecutable = ens.compilar(path=arg.replace('\\', '/'))
-		#print(ejecutable.getInstrucciones())
-		#ejecutable = ens.compilar(path=r'.\asm\include.asm')
+		file_path = os.path.join(BASE_ASM_FOLDER, arg)
+		ejecutable = ens.compilar(path=file_path)
 		ejecutables.append(ejecutable)
 		
-
 	procesador = Procesador()
 	sistema = SistemaOperativo(ejecutables, procesador)
 	procesador.setSistemaOperativo(sistema)

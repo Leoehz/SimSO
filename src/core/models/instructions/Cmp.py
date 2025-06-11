@@ -24,4 +24,5 @@ class Cmp(Instruccion):
             else:
                 flag = self.param1 == self.param2
         procesador.setRegister(Registro.FLAG, int(flag))
+        procesador.incrementarIP()
         return

@@ -18,7 +18,7 @@ class Procesador:
         self.proceso = None
         self.estado = Estado.ACTIVO
 
-    # Mientras haya instrucciones segui ejecutando    
+    # Mientras haya instrucciones segui ejecutando
     def ejecutarProceso(self, proceso: Proceso):
         self.proceso = proceso
         self.Registros = proceso.obtenerContexto()
@@ -27,21 +27,16 @@ class Procesador:
         while(self.estado == Estado.ACTIVO):
             ejecutable = self.proceso.getEjecutable()
             self.cantInstrucciones = len(ejecutable.getInstrucciones())
-            Visualizador(time_sleep=0.25).mostrar(ejecutable=ejecutable, registros=self.Registros, stack=self.proceso.stack)
-            try:
-                label = ejecutable.getInstruccion(self.Registros[R.IP]).label
-                esInstruccion = False
-            except:
-                esInstruccion = True
+            Visualizador(time_sleep=0.2).mostrar(ejecutable=ejecutable, registros=self.Registros, stack=self.proceso.stack)
             ejecutable.getInstruccion(self.Registros[R.IP]).ejecutar(self)
-            self.incrementarIP()
-            self.sistema.clockHandler(esInstruccion)
+            finEjecucion = self.sistema.clockHandler()
 
-            #Visualizador(time_sleep=0.25).mostrar(ejecutable=ejecutable, registros=self.Registros, stack=self.proceso.stack)
+            if finEjecucion:
+                self.estado = Estado.INACTIVO
             time.sleep(1)
+            
 
     def procesoTerminado(self):
-        #print(self.getIP(), self.cantInstrucciones)
         return self.getIP() == self.cantInstrucciones
 
     def detenerProcesoActual(self):

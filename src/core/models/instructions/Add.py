@@ -20,12 +20,8 @@ class Add(Instruccion):
         else:
             if(type(self.param1) == Registro):
                 dummy += procesador.getRegister(self.param1)
-        #self.param1 += self.param2
-        #procesador.setRegister(self.param1, dummy)
+
         if(type(self.param1) == Registro):
             procesador.setRegister(self.param1, dummy)
+        procesador.incrementarIP()
         return
-        #return self.param1
-    
-    def get_params(self):
-        return self.n_params

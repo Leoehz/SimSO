@@ -17,4 +17,5 @@ class Noop(Instruccion):
 
 
     def ejecutar(self, procesador):
+        procesador.incrementarIP()
         return
