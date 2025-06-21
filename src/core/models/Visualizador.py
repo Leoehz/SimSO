@@ -16,12 +16,14 @@ def clear_console():
         print("Sistema Operativo no soportado para limpiar la consola.")
 
 class Visualizador:
-    def __init__(self):
+    def __init__(self, time_sleep: int = 1):
+        self.time_sleep = time_sleep
         colorama.init()
         pass
 
-    def mostrar(self, ejecutable: Ejecutable, registros: dict):
-        listadoInstrucciones = ejecutable.getInstrucciones()
+    def mostrar(self, ejecutable: Ejecutable, registros: dict, stack: list):
+        clear_console()
+        listadoInstrucciones = list(enumerate(ejecutable.getCodigo()))
 
         IP = registros[R.IP]
         chunk = 20
@@ -29,7 +31,7 @@ class Visualizador:
         upper_bound = min(IP+chunk, len(listadoInstrucciones)-1)+1
 
         visibleChunk = listadoInstrucciones[lower_bound:upper_bound]
-        printableInstructions = [f'\t{instruction}' for instruction in visibleChunk]
+        printableInstructions = [f'\t{linea}\t{instruction}' for linea, instruction in visibleChunk]
 
         if IP < chunk:
             printable_IP = IP
@@ -39,9 +41,7 @@ class Visualizador:
         printableInstructions[printable_IP] = colored(f'>{printableInstructions[printable_IP]}', color='green')
         printable_registers = {x.name: value for x, value in registros.items()}
 
-        printable = f"\n\n{colored('=== Paso siguiente ===', color='light_cyan')}\n\n{'\n'.join(printableInstructions)}\n\nRegistros {printable_registers}"
+        printable = f"\n\n{colored(f'=== Archivo {ejecutable.getName()} ===', color='light_cyan')}\n\n{'\n'.join(printableInstructions)}\n\nRegistros {printable_registers}\n\nLabels {ejecutable.getLookupTable()}\n\nStack: {stack}"
 
         print(printable)
-        time.sleep(2)
-
-        clear_console()
+        time.sleep(self.time_sleep)

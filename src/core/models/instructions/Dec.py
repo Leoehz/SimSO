@@ -1,5 +1,5 @@
 from interfaces.Instruccion import Instruccion
-from ..Registro import Registro
+from core.models.Registro import Registro
 
 class Dec(Instruccion):
     N_PARAMS = 1
@@ -12,11 +12,12 @@ class Dec(Instruccion):
     def __repr__(self):
         return f'Dec({self.param1})'
 
-    def ejecutar(self, procesador, ejecutable):   
+    def ejecutar(self, procesador):   
         dummy = self.param1
         if(type(dummy)==Registro):
             dummy = procesador.getRegister(self.param1) - 1
             procesador.setRegister(self.param1, dummy)       
         else:
-            dummy -= 1   
+            dummy -= 1
+        procesador.incrementarIP()
         return

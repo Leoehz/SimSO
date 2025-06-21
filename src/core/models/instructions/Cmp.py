@@ -1,5 +1,5 @@
 from interfaces.Instruccion import Instruccion
-from ..Registro import Registro
+from core.models.Registro import Registro
 
 class Cmp(Instruccion):
     N_PARAMS = 2
@@ -11,9 +11,9 @@ class Cmp(Instruccion):
         self.param2 = param2
 
     def __repr__(self):
-        return f'Cmp({self.param1})'
+        return f'Cmp({self.param1}, {self.param2})'
 
-    def ejecutar(self, procesador, ejecutable):
+    def ejecutar(self, procesador):
         dummy = self.param2
         flag = 0
         if(type(dummy) == Registro):
@@ -23,5 +23,6 @@ class Cmp(Instruccion):
                 flag = procesador.getRegister(self.param1) == dummy
             else:
                 flag = self.param1 == self.param2
-        procesador.setRegister(Registro.FLAG, flag)
+        procesador.setRegister(Registro.FLAG, int(flag))
+        procesador.incrementarIP()
         return

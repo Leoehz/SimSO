@@ -1,34 +1,46 @@
-from ..models.Registro import Registro as R
-from ..models.Ejecutable import Ejecutable
-from ..models.Visualizador import Visualizador
+from core.models.Registro import Registro as R
+from core.models.Ejecutable import Ejecutable
+from core.models.Visualizador import Visualizador
+from core.models.Proceso import Proceso
+from core.models.PreservadorIP import PreservadorIP
+from core.models.Estado import Estado
 import time
 
-# TODO: PASAR EJECUTABLE A INSTRUCCIONES
-
 class Procesador:
-    def __init__(self):
-        self.Registros = {R.AX: 0,
-                          R.BX: 0,
-                          R.CX: 0,
-                          R.DX: 0,
-                          R.IP: 0,
-                          R.FLAG: 0}
-        self.lookup_table = {}
+    def __init__(self, Registros: dict = {  R.AX: 0,
+                                            R.BX: 0,
+                                            R.CX: 0,
+                                            R.DX: 0,
+                                            R.IP: 0,
+                                            R.FLAG: 0}
+                ):
+        self.Registros = Registros
+        self.proceso = None
+        self.estado = Estado.ACTIVO
 
-    # Mientras haya instrucciones segui ejecutando    
-    def ejecutar(self, ejecutable: Ejecutable):
-        cantInstrucciones = len(ejecutable.getInstrucciones())
-        self.lookup_table = ejecutable.getLookupTable()
-        self.setRegister(R.IP, ejecutable.getEntryPoint())
-        while(self.getIP() < cantInstrucciones):
-            ejecutable.getInstruccion(self.Registros[R.IP]).ejecutar(self, ejecutable=ejecutable)
-            Visualizador().mostrar(ejecutable=ejecutable, registros=self.Registros, )
-            self.incrementarIP()
+    # Mientras haya instrucciones segui ejecutando
+    def ejecutarProceso(self, proceso: Proceso):
+        self.proceso = proceso
+        self.Registros = proceso.obtenerContexto()
+
+    def procesar(self):
+        while(self.estado == Estado.ACTIVO):
+            ejecutable = self.proceso.getEjecutable()
+            self.cantInstrucciones = len(ejecutable.getInstrucciones())
+            Visualizador(time_sleep=0.2).mostrar(ejecutable=ejecutable, registros=self.Registros, stack=self.proceso.stack)
+            ejecutable.getInstruccion(self.Registros[R.IP]).ejecutar(self)
+            finEjecucion = self.sistema.clockHandler()
+
+            if finEjecucion:
+                self.estado = Estado.INACTIVO
             time.sleep(1)
+            
 
-    
-    def getLookupTable(self):
-        return self.lookup_table
+    def procesoTerminado(self):
+        return self.getIP() == self.cantInstrucciones
+
+    def detenerProcesoActual(self):
+        self.proceso.guardarContexto(self.Registros)
 
     def incrementarIP(self):
         self.Registros[R.IP] += 1
@@ -39,5 +51,27 @@ class Procesador:
     def getRegister(self, registro: R):
         return self.Registros[registro]
     
+    def getRegisters(self):
+        return self.Registros
+    
+    def setRegisters(self, Registros):
+        self.Registros = Registros
+    
     def getIP(self):
         return self.getRegister(R.IP)
+
+    def getProceso(self):
+        return self.proceso
+
+    def setPreservadorIP(self, valor):
+        self.preservador = PreservadorIP()
+        self.preservador.setValorIP(valor)
+
+    def delPreservador(self):
+        del self.preservador
+
+    def getPreservadorIP(self):
+        return self.preservador
+
+    def setSistemaOperativo(self, sistema):
+        self.sistema = sistema

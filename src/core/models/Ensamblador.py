@@ -1,12 +1,16 @@
+import os
+from config import LIBS_FOLDER
 from utils.validators import valid_line, validate_instruct, validate_params, TypeLine, ENTRYPOINT_LABEL
-from ..models.Ejecutable import Ejecutable
+from core.models.instructions import Noop, Jmp
+from core.models.Ejecutable import Ejecutable
+from exceptions import CompilationError, InvalidInclude
 
 class Ensamblador:
 
-	def __init__(self, path):
-		self.path = path
+	def __init__(self):
+		pass
 
-	def compilar(self) -> Ejecutable:
+	def compilar(self, path: str, include_list: list = [], ignore_entry_point: bool = False) -> Ejecutable:
 		instrucciones = []
 		codigo_fuente = []
 		lookup_table = {}
@@ -14,7 +18,7 @@ class Ensamblador:
 		error_flag = False
 		errores = []
 
-		with open(self.path, 'r') as file_to_read:
+		with open(path, 'r') as file_to_read:
 			for line in file_to_read:
 				line = line.strip()
 				# Saltear si la linea esta vacia o es un comentario
@@ -36,7 +40,6 @@ class Ensamblador:
 						inst = validate_instruct(inst='noop')
 						label = str(match.group(1))
 
-						print(label)
 						if label in lookup_table.keys():
 							raise Exception(f'La etiqueta "{label}" se encuentra repetida en el codigo.')
 
@@ -47,24 +50,79 @@ class Ensamblador:
 
 						if label == ENTRYPOINT_LABEL:
 							entry_point = label_line
+
+					elif type_line == TypeLine.include:
+						include_file = str(match.group(1))
+						include_path = os.path.join(os.getcwd(), LIBS_FOLDER, include_file)
+
+						if not os.path.exists(include_path):
+							raise InvalidInclude(f'El archivo "{include_file}" no existe en la carpeta de librerias. Ruta de librerias: {os.path.join(os.getcwd(), LIBS_FOLDER)}.')
+
+						if include_file in include_list:
+							raise InvalidInclude(f'Referencia circular intentando importar "{include_file}" al ensamblar {path}.')
+						
+						include_list.append(include_file)
+						include_exec = self.compilar(path=include_path, include_list=include_list, ignore_entry_point=True)
+
+						end_include_label = f'fin_include_{include_file.replace('.asm', '')}'
+						len_instrucciones = len(instrucciones)+1
+
+						include_instrucciones = [inst for inst in include_exec.getInstrucciones()]
+						
+						include_codigo = [cod for cod in include_exec.getCodigo()]
+						
+						include_lookup_table = {label: n_line + len_instrucciones
+							  					for label, n_line in include_exec.getLookupTable().items()}
+
+						instrucciones.append(Jmp(param1=end_include_label, label=f'Include("{include_file}")'))
+						instrucciones.extend(include_instrucciones)
+						instrucciones.append(Noop(label=f'EndInclude("{include_file}")'))
+
+						codigo_fuente.append(line)
+						codigo_fuente.extend(include_codigo)
+						codigo_fuente.append(f'{end_include_label}:')
+
+						include_lookup_table[end_include_label] = len(instrucciones)-1
+
+						intersect_lookup = [x for x in lookup_table.keys() if x in include_lookup_table.keys()]
+
+						if len(intersect_lookup) > 0:
+							raise InvalidInclude(f'Se detectaron labels de Lookup Table identicas al importar "{include_file}". Labels repetidas: {intersect_lookup}')
+						lookup_table.update(include_lookup_table)
+					
+					elif type_line == TypeLine.ret:
+						inst = str(match.group(0))
+						inst = validate_instruct(inst=inst)
+						instrucciones.append(inst())
+						codigo_fuente.append(line)
+
+					elif type_line == TypeLine.noop:
+						inst = str(match.group(0))
+						inst = validate_instruct(inst=inst)
+						instrucciones.append(inst())
+						codigo_fuente.append(line)
+
 					else:
 						raise SyntaxError('Sintaxis no valida.')
+				except InvalidInclude as e:
+					raise InvalidInclude(e)
 				except Exception as e:
 					error_txt = f'Error: {e}. Linea: {len(instrucciones)-1} - "{line}". '
 					errores.append(error_txt)
 					error_flag = True
 					continue
 
-		if entry_point == -1:
-			raise Exception(f'El codigo no contiene la etiqueta de inicio de codigo "{ENTRYPOINT_LABEL}"')
+		if not ignore_entry_point and entry_point == -1:
+			raise CompilationError(f'El codigo no contiene la etiqueta de inicio de codigo "{ENTRYPOINT_LABEL}"')
 
 		if error_flag:
-			raise Exception(f'Se detectaron errores en la compilacion. Abortando operacion.\nDetalle: {errores}')
+			raise CompilationError(f'Se detectaron errores en la compilacion. Abortando operacion.\nDetalle: {errores}')
 
 		ejecutable = Ejecutable(instrucciones=instrucciones,
 						  		codigo_fuente=codigo_fuente,
 								lookup_table=lookup_table,
-								entry_point=entry_point
+								entry_point=entry_point,
+								executable_name=os.path.basename(path)
 								)
 
 		return ejecutable
