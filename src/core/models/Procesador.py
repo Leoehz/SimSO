@@ -27,7 +27,7 @@ class Procesador:
         while(self.estado == Estado.ACTIVO):
             ejecutable = self.proceso.getEjecutable()
             self.cantInstrucciones = len(ejecutable.getInstrucciones())
-            Visualizador(time_sleep=0.2).mostrar(ejecutable=ejecutable, registros=self.Registros, stack=self.proceso.stack)
+            Visualizador(time_sleep=0.2).mostrar(procesador=self)
             ejecutable.getInstruccion(self.Registros[R.IP]).ejecutar(self)
             finEjecucion = self.sistema.clockHandler()
 
@@ -75,3 +75,6 @@ class Procesador:
 
     def setSistemaOperativo(self, sistema):
         self.sistema = sistema
+
+    def getSistemaOperativo(self):
+        return self.sistema

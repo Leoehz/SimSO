@@ -1,5 +1,5 @@
-from .Ejecutable import Ejecutable
-from .Registro import Registro as R
+#from core.models.Procesador import Procesador
+from core.models.Registro import Registro as R
 from termcolor import colored
 import colorama
 import os
@@ -21,8 +21,14 @@ class Visualizador:
         colorama.init()
         pass
 
-    def mostrar(self, ejecutable: Ejecutable, registros: dict, stack: list):
+    def mostrar(self, procesador):
         clear_console()
+
+        proceso = procesador.getProceso()
+        ejecutable = proceso.getEjecutable()
+        registros = procesador.getRegisters()
+        stack = proceso.getStack()
+
         listadoInstrucciones = list(enumerate(ejecutable.getCodigo()))
 
         IP = registros[R.IP]
@@ -43,5 +49,13 @@ class Visualizador:
 
         printable = f"\n\n{colored(f'=== Archivo {ejecutable.getName()} ===', color='light_cyan')}\n\n{'\n'.join(printableInstructions)}\n\nRegistros {printable_registers}\n\nLabels {ejecutable.getLookupTable()}\n\nStack: {stack}"
 
+        matrizPrintable = ""
+
+        matrizVideo = proceso.getMemoriaVideo()
+
+        for i in range(matrizVideo.shape[0]):
+            matrizPrintable += ' '.join(list(map(str, matrizVideo[i]))) + '\n'
+
+        printable += '\n\n\nMatriz de video:\n' + matrizPrintable
         print(printable)
         time.sleep(self.time_sleep)

@@ -1,5 +1,5 @@
 from interfaces.Instruccion import Instruccion
-from ..Registro import Registro
+from core.models.Registro import Registro
 #from exceptions import IPIntegrityViolation
 import time
 

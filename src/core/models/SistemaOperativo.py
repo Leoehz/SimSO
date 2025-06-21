@@ -49,3 +49,9 @@ class SistemaOperativo:
         return False
 
 
+    def sysCallHandler(self, servicio, params):
+        if (servicio == 1):
+            valor = params[0]
+            fila = params[1]
+            columna = params[2]
+            self.procesos[self.procesoActivo].setDataMemoriaVideo(fila, columna, valor)

@@ -1,6 +1,7 @@
 from core.models.Ejecutable import Ejecutable
 from core.models.Registro import Registro as R
 from core.models.Estado import Estado
+import numpy as np
 
 class Proceso:
     def __init__(self, ejecutable: Ejecutable):
@@ -14,6 +15,7 @@ class Proceso:
                             R.FLAG: 0
                         }
         self.estado = Estado.BLOQUEADO
+        self.matrizVideo = np.zeros((10, 10), int)
 
     # Mientras haya instrucciones segui ejecutando    
     def getEjecutable(self):
@@ -36,3 +38,12 @@ class Proceso:
 
     def setEstado(self, estado: Estado):
         self.estado = estado
+
+    def setDataMemoriaVideo(self, fila, columna, valor):
+        self.matrizVideo[fila][columna] = valor
+
+    def getMemoriaVideo(self):
+        return self.matrizVideo
+
+    def getStack(self):
+        return self.stack

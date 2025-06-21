@@ -1,6 +1,6 @@
 from interfaces.Instruccion import Instruccion
-from ..Registro import Registro
-from ..Procesador import Procesador
+from core.models.Registro import Registro
+from core.models.Procesador import Procesador
 
 class Pop(Instruccion):
     N_PARAMS = 1
