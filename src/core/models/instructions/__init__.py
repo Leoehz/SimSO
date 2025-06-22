@@ -10,3 +10,4 @@ from .Push import Push
 from .Pop import Pop
 from .Call import Call
 from .Ret import Ret
+from .Int import Int

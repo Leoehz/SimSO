@@ -3,3 +3,6 @@ class CompilationError(Exception):
 
 class InvalidInclude(Exception):
     pass
+
+class ExecutionError(Exception):
+    pass
