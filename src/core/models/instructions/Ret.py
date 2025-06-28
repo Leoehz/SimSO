@@ -25,3 +25,5 @@ class Ret(Instruccion):
             time.sleep(3)
         procesador.setRegister(Registro.IP, dummy)
         procesador.delPreservador()
+        procesador.incrementarIP()
+        return

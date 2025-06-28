@@ -20,9 +20,9 @@ class Cmp(Instruccion):
             flag = procesador.getRegister(dummy) == procesador.getRegister(self.param1)
         else:
             if(type(self.param1) == Registro):
-                flag = procesador.getRegister(self.param1) == dummy
+                flag = 0 if procesador.getRegister(self.param1) == dummy else 1
             else:
-                flag = self.param1 == self.param2
+                flag = 0 if self.param1 == self.param2 else 1
         procesador.setRegister(Registro.FLAG, int(flag))
         procesador.incrementarIP()
         return
