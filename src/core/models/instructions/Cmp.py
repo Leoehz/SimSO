@@ -16,13 +16,18 @@ class Cmp(Instruccion):
     def ejecutar(self, procesador):
         dummy = self.param2
         flag = 0
+        carry_flag = 0
         if(type(dummy) == Registro):
             flag = procesador.getRegister(dummy) == procesador.getRegister(self.param1)
+            carry_flag = procesador.getRegister(dummy) <= procesador.getRegister(self.param1)
         else:
             if(type(self.param1) == Registro):
                 flag = 0 if procesador.getRegister(self.param1) == dummy else 1
+                carry_flag = procesador.getRegister(self.param1) <= dummy
             else:
                 flag = 0 if self.param1 == self.param2 else 1
+                carry_flag = self.param1 <= self.param2
         procesador.setRegister(Registro.FLAG, int(flag))
+        procesador.setRegister(Registro.CARRY_FLAG, int(carry_flag))
         procesador.incrementarIP()
         return

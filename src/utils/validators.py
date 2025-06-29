@@ -13,9 +13,10 @@ from core.models.instructions import (Mov,
                                       Pop,
                                       Call,
                                       Ret,
-                                      Int)
+                                      Int,
+                                      Jle)
 
-instrucciones_validas = [Mov, Add, Inc, Dec, Jmp, Jnz, Cmp, Noop, Push, Pop, Call, Ret, Int]
+instrucciones_validas = [Mov, Add, Inc, Dec, Jmp, Jnz, Cmp, Noop, Push, Pop, Call, Ret, Int, Jle]
 inst_factory = {inst.SYNTAX: inst for inst in instrucciones_validas}
 ENTRYPOINT_LABEL = 'main'
 

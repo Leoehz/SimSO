@@ -7,3 +7,4 @@ class Registro(StrEnum):
     DX = 'dx'
     IP = 'ip'
     FLAG = 'flag'
+    CARRY_FLAG = 'carry_flag'

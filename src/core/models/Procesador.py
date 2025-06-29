@@ -12,7 +12,8 @@ class Procesador:
                                             R.CX: 0,
                                             R.DX: 0,
                                             R.IP: 0,
-                                            R.FLAG: 0}
+                                            R.FLAG: 0,
+                                            R.CARRY_FLAG: 0}
                 ):
         self.Registros = Registros
         self.proceso = None
