@@ -30,3 +30,36 @@ dividir:
         push dx
         # Se devuelve el resultado, en ax queda el resto y en bx queda el cociente.
         ret
+
+raiz_cuadrada:
+    # Extraigo IP
+    pop dx
+    mov bx, 1
+    mov ax, 0
+    pop cx
+    push bx
+    push cx
+    mov cx, 1
+    multiplica:
+        add ax, cx
+        dec bx
+        cmp bx, 0
+        jnz multiplica
+        pop cx
+        cmp ax, cx
+        jle continuar
+        jmp fin
+    continuar:
+        pop bx
+        inc bx
+        push bx
+        push cx
+        mov cx, bx
+        mov ax, 0
+        jmp multiplica
+    fin:
+        # devuelve el resultado entero más cercano hacia abajo en bx
+        pop bx
+        dec bx
+        push dx
+    ret
