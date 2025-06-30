@@ -12,3 +12,4 @@ from .Call import Call
 from .Ret import Ret
 from .Int import Int
 from .Jle import Jle
+from .Sub import Sub

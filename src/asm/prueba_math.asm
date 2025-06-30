@@ -7,3 +7,7 @@ main:
     push 3
     push 8
     call dividir
+    noop
+    noop
+    noop
+    noop

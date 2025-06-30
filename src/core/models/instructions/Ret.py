@@ -17,7 +17,6 @@ class Ret(Instruccion):
     def ejecutar(self, procesador):
         proceso = procesador.getProceso()
         dummy = proceso.popValorStack()
-        print(dummy, procesador.getPreservadorIP().getValorIP())
         if(procesador.getPreservadorIP().getValorIP() != dummy):
             #raise IPIntegrityViolation()
             dummy = procesador.getPreservadorIP().getValorIP()

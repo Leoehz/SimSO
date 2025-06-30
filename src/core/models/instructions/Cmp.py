@@ -19,7 +19,7 @@ class Cmp(Instruccion):
         carry_flag = 0
         if(type(dummy) == Registro):
             flag = procesador.getRegister(dummy) == procesador.getRegister(self.param1)
-            carry_flag = procesador.getRegister(dummy) <= procesador.getRegister(self.param1)
+            carry_flag = procesador.getRegister(self.param1)  <= procesador.getRegister(dummy)
         else:
             if(type(self.param1) == Registro):
                 flag = 0 if procesador.getRegister(self.param1) == dummy else 1
