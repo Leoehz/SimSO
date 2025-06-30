@@ -18,6 +18,7 @@ dividir:
     pop ax
     # Divisor
     pop cx
+    # Seteo en 0 el cociente inicial
     mov bx, 0
     div_cycle:
         cmp ax, cx
@@ -27,4 +28,5 @@ dividir:
         jmp div_cycle
     fin_div:
         push dx
+        # Se devuelve el resultado, en ax queda el resto y en bx queda el cociente.
         ret
